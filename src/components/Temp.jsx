@@ -19,7 +19,10 @@ const Temp = () => {
       .then((doc) => {
         if (doc.exists) {
           const quizData = doc.data();
-          const questionsData = quizData.questions;
+
+          // title description time points in quizData.quizData[0]
+
+          const questionsData = quizData.quizData[1].questions;
           setQuestions(questionsData);
         } else {
           console.log("No such document!");

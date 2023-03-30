@@ -62,10 +62,20 @@ const QuizCreator = () => {
     // adding the quiz to the database
     const quizRef = db.collection("quizzes").doc(quizName);
 
+    const quizData = [];
+    quizData.push({
+      name: quizName,
+      description: quizDescription,
+      points: quizPoints,
+      time: quizTime,
+    });
+    quizData.push({
+      questions: questions,
+    });
     quizRef
-      .set({ questions })
+      .set({ quizData })
       .then(() => {
-        console.log("Questions added to Firestore");
+        console.log("Quiz added to Firestore");
       })
       .catch((error) => {
         console.error("Error adding questions to Firestore: ", error);
