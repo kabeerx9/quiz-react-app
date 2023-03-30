@@ -1,0 +1,17 @@
+.individual {
+  display: flex;
+  flex-direction: column;
+}
+
+.individual > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: auto;
+  margin: 10px;
+  padding: 10px;
+  border: 5px solid #ccc;
+}
+.individual > div > button {
+  max-width: 70px;
+}
