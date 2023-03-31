@@ -7,7 +7,8 @@ const Temp = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showScore, setShowScore] = useState(false);
   const [score, setScore] = useState(0);
-
+  const [points, setPoints] = useState(1);
+  const [time, setTime] = useState(10);
   const { quizid } = useParams();
   const navigate = useNavigate();
 
@@ -21,7 +22,8 @@ const Temp = () => {
           const quizData = doc.data();
 
           // title description time points in quizData.quizData[0]
-
+          const gamePoints = quizData.quizData[0].points;
+          setPoints(gamePoints);
           const questionsData = quizData.quizData[1].questions;
           setQuestions(questionsData);
         } else {
@@ -33,6 +35,22 @@ const Temp = () => {
       });
   }, [quizid]);
 
+  useEffect(() => {
+    if (time > 0) {
+      const intervalId = setInterval(() => {
+        setTime((prevTime) => prevTime - 1);
+      }, 1000);
+
+      return () => clearInterval(intervalId);
+    }
+  }, [time]);
+
+  useEffect(() => {
+    if (time === 0) {
+      setShowScore(true);
+    }
+  }, [time]);
+
   const handleAnswerOptionClick = (isCorrect) => {
     if (isCorrect) {
       setScore(score + 1);
@@ -42,16 +60,24 @@ const Temp = () => {
     if (nextQuestion < questions.length) {
       setCurrentQuestion(nextQuestion);
     } else {
+      setTime(0);
       setShowScore(true);
     }
   };
 
   return (
     <>
+      <h1>Timer : {time}</h1>
       <div className="app">
         {showScore ? (
-          <div className="score-section">
-            You scored {score} out of {questions.length}
+          <div>
+            <div className="score-section">
+              You answered {score} out of {questions.length} correctly
+            </div>
+            <div className="score-section">
+              You scored {score * points} out of {questions.length * points}{" "}
+              points
+            </div>
           </div>
         ) : (
           <>
@@ -78,6 +104,7 @@ const Temp = () => {
           </>
         )}
       </div>
+
       <button onClick={() => navigate("/app")}>Go Home </button>
     </>
   );

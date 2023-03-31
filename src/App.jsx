@@ -32,7 +32,7 @@ function App() {
     <div>
       <button onClick={addDataHandler}>Add data in firebase</button>
       {/* <CreateQuizForm /> */}
-      <StartQuizButton id="geography" />
+      <StartQuizButton id="football" />
       {/* <QuizList /> */}
     </div>
   );
