@@ -81,10 +81,9 @@ const QuizCreator = () => {
         console.error("Error adding questions to Firestore: ", error);
       });
 
-    // navigate to the start quiz page with id same as quiz name
-
-    navigate(`/app/${quizName}`);
-    console.log(questions);
+    // navigate to the root 
+    
+    navigate(`/app/`);
   };
 
   const isAddQuestionButtonDisabled =
@@ -98,6 +97,8 @@ const QuizCreator = () => {
     !quizPoints ||
     !quizTime ||
     questions.length === 0;
+
+  console.log("Creating Quiz Component");
 
   return (
     <Grid container direction="column" spacing={2} className="QuizCreator">

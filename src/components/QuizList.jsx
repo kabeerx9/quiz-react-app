@@ -1,54 +1,79 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { db } from "../database/firebase";
-import { getDocs, collection, deleteDoc, doc } from "firebase/firestore";
 import "./QuizList.css";
 
+import { Button, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { useNavigate } from "react-router-dom";
+const useStyles = makeStyles((theme) => ({
+  quizList: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: theme.spacing(3),
+    flexWrap: "wrap", // Add flex-wrap property to wrap items
+  },
+  quizCard: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#f5f5f5",
+    padding: theme.spacing(3),
+    borderRadius: theme.spacing(1),
+    marginBottom: theme.spacing(2),
+    boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+    width: "50%", // Set width to 50% for 2 columns
+    [theme.breakpoints.up("sm")]: {
+      maxWidth: "500px",
+    },
+  },
+}));
+
 const QuizList = () => {
-  const [quizList, setQuizList] = useState([]);
-
-  const quizCollectionRef = collection(db, "movies");
-
-  const deleteQuiz = async (id) => {
-    const movieDoc = doc(db, "movies", id);
-    await deleteDoc(movieDoc);
-    setQuizList((prevQuizList) =>
-      prevQuizList.filter((quiz) => quiz.id !== id)
-    );
-  };
+  const classes = useStyles();
+  const [quizzes, setQuizzes] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const getQuizList = async () => {
-      // READ THE DATA
-      // SET THE QUIZ LIST DATA
-      try {
-        const data = await getDocs(quizCollectionRef);
-        const filteredData = data.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-        console.log(filteredData);
-        setQuizList(filteredData);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+    db.collection("quizzes")
+      .get()
+      .then((querySnapshot) => {
+        const data = querySnapshot.docs.map((doc) => doc.data());
+        setQuizzes(data);
+      });
+  }, []);
 
-    getQuizList();
-  }, [quizList]);
+  const startQuizHandler = (id) => {
+    navigate(`/app/${id}`);
+  };
+
+  console.log("QuizList Component");
 
   return (
     <>
-      <h1> The following Quiz are Available :</h1>
-      <div className="individual">
-        {quizList.map((quiz) => (
-          <div>
-            <h1>{quiz.name}</h1>
-            <p>{quiz.description}</p>
-            <p>{quiz.points}</p>
-            <p>{quiz.time}</p>
-            <button>Start Quiz </button>
-            <button onClick={() => deleteQuiz(quiz.id)}>Delete Quiz </button>
+      <Typography variant="h3">Current Quiz Available: </Typography>
+      <div className={classes.quizList}>
+        {quizzes.map((quiz, index) => (
+          <div className={classes.quizCard} key={index}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => startQuizHandler(quiz.quizData[0].name)}
+            >
+              Name: {quiz.quizData[0].name}
+            </Button>
+            <Typography variant="subtitle1">
+              {quiz.quizData[0].description}
+            </Typography>
+            <Typography variant="subtitle1">
+              Point per : {quiz.quizData[0].points}
+            </Typography>
+            <Typography variant="subtitle1">
+              Time: {quiz.quizData[0].time}
+            </Typography>
           </div>
         ))}
       </div>
