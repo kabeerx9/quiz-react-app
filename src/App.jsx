@@ -1,50 +1,61 @@
 import React from "react";
 import QuizList from "./components/QuizList";
-import { db } from "./database/firebase";
 import { useNavigate } from "react-router-dom";
+import { Button, Container, Grid, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    margin: theme.spacing(5),
+  },
+  title: {
+    marginBottom: theme.spacing(5),
+  },
+  createQuizButton: {
+    marginBottom: theme.spacing(5),
+  },
+  quizList: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+  },
+}));
 
 function CreateQuizButton() {
   const navigate = useNavigate();
+  const classes = useStyles();
 
   return (
-    <>
-      <button
-        style={{
-          width: "100%",
-          height: "50px",
-          display: "flex",
-          justifyContent: "center",
-        }}
-        onClick={() => navigate(`/app/creation`)}
-      >
-        Create Quiz
-      </button>
-    </>
+    <Button
+      className={classes.createQuizButton}
+      variant="contained"
+      color="primary"
+      onClick={() => navigate(`/app/creation`)}
+    >
+      Create Quiz
+    </Button>
   );
 }
 
 function App() {
-  // const addDataHandler = () => {
-  //   const quizRef = db.collection("quizzes").doc("geography");
-
-  //   quizRef
-  //     .set({ quizData })
-  //     .then(() => {
-  //       console.log("Questions added to Firestore");
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error adding questions to Firestore: ", error);
-  //     });
-  // };
+  const classes = useStyles();
   console.log("App component");
 
   return (
-    <div>
-      <h1>WELCOME TO THE QUIZ APP ASSIGNMENT</h1>
-      {/* <CreateQuizForm /> */}
+    <Container className={classes.root} maxWidth="lg">
+      <Typography className={classes.title} variant="h2">
+        WELCOME TO THE QUIZ APP ASSIGNMENT
+      </Typography>
       <CreateQuizButton />
-      <QuizList />
-    </div>
+      <Grid container spacing={3} className={classes.quizList}>
+        <QuizList />
+      </Grid>
+    </Container>
   );
 }
 

@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   quizList: {
     display: "flex",
-    flexDirection: "column",
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     marginTop: theme.spacing(3),
@@ -49,11 +49,29 @@ const QuizList = () => {
   const startQuizHandler = (id) => {
     navigate(`/app/${id}`);
   };
+  const deleteQuizHandler = (id) => {
+    const animeDocRef = db.collection("quizzes").doc(id);
+
+    // Delete the "anime" document
+    animeDocRef
+      .delete()
+      .then(() => {
+        console.log("Document successfully deleted!");
+        // Remove the deleted quiz from the quizzes state
+        const updatedQuizzes = quizzes.filter(
+          (quiz) => quiz.quizData[0].name !== id
+        );
+        setQuizzes(updatedQuizzes);
+      })
+      .catch((error) => {
+        console.error("Error removing document: ", error);
+      });
+  };
 
   console.log("QuizList Component");
 
   return (
-    <>
+    <div style={{ flexDirection: "column" }}>
       <Typography variant="h3">Current Quiz Available: </Typography>
       <div className={classes.quizList}>
         {quizzes.map((quiz, index) => (
@@ -74,10 +92,17 @@ const QuizList = () => {
             <Typography variant="subtitle1">
               Time: {quiz.quizData[0].time}
             </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => deleteQuizHandler(quiz.quizData[0].name)}
+            >
+              Delete Quiz{" "}
+            </Button>
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
