@@ -81,9 +81,9 @@ const QuizCreator = () => {
         console.error("Error adding questions to Firestore: ", error);
       });
 
-    // navigate to the root 
-    
-    navigate(`/app/`);
+    // navigate to the root
+
+    navigate(`/app`);
   };
 
   const isAddQuestionButtonDisabled =
@@ -135,7 +135,7 @@ const QuizCreator = () => {
       </Grid>
       <Grid item>
         <TextField
-          label="Quiz Time"
+          label="Quiz Time (in Seconds)"
           variant="outlined"
           fullWidth
           type="number"
@@ -202,6 +202,13 @@ const QuizCreator = () => {
           onClick={handleQuizSubmit}
         >
           Submit Quiz
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => navigate("/app")}
+        >
+          Go Back
         </Button>
       </Grid>
     </Grid>

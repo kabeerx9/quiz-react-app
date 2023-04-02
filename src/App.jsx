@@ -49,7 +49,7 @@ function App() {
   return (
     <Container className={classes.root} maxWidth="lg">
       <Typography className={classes.title} variant="h2">
-        WELCOME TO THE QUIZ APP ASSIGNMENT
+        QUIZ APP ASSIGNMENT
       </Typography>
       <CreateQuizButton />
       <Grid container spacing={3} className={classes.quizList}>

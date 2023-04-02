@@ -24,6 +24,7 @@ const Temp = () => {
           // title description time points in quizData.quizData[0]
           const gamePoints = quizData.quizData[0].points;
           setPoints(gamePoints);
+          setTime(quizData.quizData[0].time);
           const questionsData = quizData.quizData[1].questions;
           setQuestions(questionsData);
         } else {

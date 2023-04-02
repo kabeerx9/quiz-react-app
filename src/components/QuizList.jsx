@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#f5f5f5",
+    // backgroundColor: "white",
     padding: theme.spacing(3),
     borderRadius: theme.spacing(1),
     marginBottom: theme.spacing(2),
@@ -38,6 +38,7 @@ const QuizList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("List component re-render");
     db.collection("quizzes")
       .get()
       .then((querySnapshot) => {
@@ -47,7 +48,7 @@ const QuizList = () => {
   }, []);
 
   const startQuizHandler = (id) => {
-    navigate(`/app/${id}`);
+    navigate(`/app/start/${id}`);
   };
   const deleteQuizHandler = (id) => {
     const animeDocRef = db.collection("quizzes").doc(id);
@@ -67,8 +68,10 @@ const QuizList = () => {
         console.error("Error removing document: ", error);
       });
   };
-
-  console.log("QuizList Component");
+  const editQuizHandler = (id) => {
+    // NAVIGATE TO THE EDITING PAGE BRO .
+    navigate(`/app/edit/${id}`);
+  };
 
   return (
     <div style={{ flexDirection: "column" }}>
@@ -92,13 +95,24 @@ const QuizList = () => {
             <Typography variant="subtitle1">
               Time: {quiz.quizData[0].time}
             </Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => deleteQuizHandler(quiz.quizData[0].name)}
-            >
-              Delete Quiz{" "}
-            </Button>
+            <div style={{ display: "flex" }}>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => deleteQuizHandler(quiz.quizData[0].name)}
+                style={{ margin: "10px" }}
+              >
+                Delete Quiz{" "}
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => editQuizHandler(quiz.quizData[0].name)}
+                style={{ margin: "10px" }}
+              >
+                Edit Quiz{" "}
+              </Button>
+            </div>
           </div>
         ))}
       </div>
