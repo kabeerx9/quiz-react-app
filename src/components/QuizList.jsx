@@ -1,34 +1,38 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { db } from "../database/firebase";
-import "./QuizList.css";
-
-import { Button, Typography } from "@material-ui/core";
+import {
+  Typography,
+  Button,
+  Grid,
+  Card,
+  CardContent,
+  CardActions,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useNavigate } from "react-router-dom";
+
 const useStyles = makeStyles((theme) => ({
-  quizList: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: theme.spacing(3),
-    flexWrap: "wrap", // Add flex-wrap property to wrap items
+  root: {
+    flexGrow: 1,
+    padding: theme.spacing(2),
+    backgroundColor: "#F6F6F6",
+    minHeight: "100vh",
   },
-  quizCard: {
+  heading: {
+    marginBottom: theme.spacing(3),
+  },
+  card: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    // backgroundColor: "white",
-    padding: theme.spacing(3),
-    borderRadius: theme.spacing(1),
-    marginBottom: theme.spacing(2),
+    justifyContent: "space-between",
+    minHeight: "250px",
+    padding: theme.spacing(2),
+    borderRadius: theme.spacing(2),
     boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-    width: "50%", // Set width to 50% for 2 columns
-    [theme.breakpoints.up("sm")]: {
-      maxWidth: "500px",
-    },
+    backgroundColor: "white",
+  },
+  button: {
+    marginTop: "auto",
   },
 }));
 
@@ -74,48 +78,58 @@ const QuizList = () => {
   };
 
   return (
-    <div style={{ flexDirection: "column" }}>
-      <Typography variant="h3">Current Quiz Available: </Typography>
-      <div className={classes.quizList}>
-        {quizzes.map((quiz, index) => (
-          <div className={classes.quizCard} key={index}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => startQuizHandler(quiz.quizData[0].name)}
-            >
-              Name: {quiz.quizData[0].name}
-            </Button>
-            <Typography variant="subtitle1">
-              {quiz.quizData[0].description}
-            </Typography>
-            <Typography variant="subtitle1">
-              Point per : {quiz.quizData[0].points}
-            </Typography>
-            <Typography variant="subtitle1">
-              Time: {quiz.quizData[0].time}
-            </Typography>
-            <div style={{ display: "flex" }}>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => deleteQuizHandler(quiz.quizData[0].name)}
-                style={{ margin: "10px" }}
-              >
-                Delete Quiz{" "}
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => editQuizHandler(quiz.quizData[0].name)}
-                style={{ margin: "10px" }}
-              >
-                Edit Quiz{" "}
-              </Button>
-            </div>
-          </div>
+    <div className={classes.root}>
+      <Typography variant="h3" className={classes.heading}>
+        Available Quizzes
+      </Typography>
+      <Grid container spacing={3}>
+        {quizzes.map((quiz) => (
+          <Grid item key={quiz.quizData[0].name} xs={12} sm={6}>
+            <Card className={classes.card}>
+              <CardContent>
+                <Typography variant="h5" component="h2">
+                  {quiz.quizData[0].name}
+                </Typography>
+                <Typography variant="h6" component="p">
+                  {quiz.quizData[0].description}
+                </Typography>
+                <Typography variant="h6" component="p">
+                  Time : {quiz.quizData[0].time} seconds
+                </Typography>
+                <Typography variant="h6" component="p">
+                  Point : {quiz.quizData[0].points}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button
+                  className={classes.button}
+                  variant="contained"
+                  color="primary"
+                  onClick={() => startQuizHandler(quiz.quizData[0].name)}
+                >
+                  Start Quiz
+                </Button>
+                <Button
+                  className={classes.button}
+                  variant="contained"
+                  color="primary"
+                  onClick={() => editQuizHandler(quiz.quizData[0].name)}
+                >
+                  Edit Quiz
+                </Button>
+                <Button
+                  className={classes.button}
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => deleteQuizHandler(quiz.quizData[0].name)}
+                >
+                  Delete Quiz
+                </Button>
+              </CardActions>
+            </Card>
+          </Grid>
         ))}
-      </div>
+      </Grid>
     </div>
   );
 };

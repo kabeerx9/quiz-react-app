@@ -9,7 +9,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Temp from "./components/Temp";
+import QuizStart from "./components/QuizStart";
 import QuizCreator from "./components/QuizCreator";
 import EditQuiz from "./components/EditQuiz";
 
@@ -20,7 +20,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/" element={<Navigate to="/app" />} />
         <Route path="/app" element={<App />} />
         <Route path="/app/creation" element={<QuizCreator />} />
-        <Route path="/app/start/:quizid" element={<Temp />} />
+        <Route path="/app/start/:quizid" element={<QuizStart />} />
         <Route path="/app/edit/:quizid" element={<EditQuiz />} />
       </Routes>
     </Router>

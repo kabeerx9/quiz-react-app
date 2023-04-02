@@ -5,11 +5,54 @@ import {
   FormControlLabel,
   Button,
   Grid,
+  Card,
 } from "@material-ui/core";
 import { useNavigate, useParams } from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
 import { db } from "../database/firebase";
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    margin: "10px",
+    padding: "0",
+    border: "4px solid",
+  },
+  heading: {
+    color: "",
+    marginBottom: theme.spacing(3),
+  },
+  card: {
+    display: "flex",
+    flexDirection: "column",
+    width: "500px",
+    justifyContent: "space-between",
+    minHeight: "250px",
+    padding: theme.spacing(2),
+    borderRadius: theme.spacing(2),
+    boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+    margin: "10px 10px 10px 10px",
+    backgroundColor: "#F5F5F5",
+  },
+  card2: {
+    display: "flex",
+    flexDirection: "column",
+    width: "500px",
+    marginLeft: "420px",
+    minHeight: "250px",
+    padding: theme.spacing(2),
+    borderRadius: theme.spacing(2),
+    boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+    backgroundColor: "#d6c675",
+    border: "5px solid",
+    margin: "10px 10px 10px 10px",
+  },
+  button: {
+    marginTop: "auto",
+  },
+}));
+
 const QuizComponent = () => {
+  const classes = useStyles();
   const [quizName, setQuizName] = useState("");
   const [quizDescription, setQuizDescription] = useState("");
   const [quizTime, setQuizTime] = useState("");
@@ -191,67 +234,79 @@ const QuizComponent = () => {
     selectedAnswerIndex === null;
 
   return (
-    <div>
-      <TextField label="Quiz Name" value={quizName} />
+    <div className={classes.root}>
+      <Card className={classes.card2}>
+        <TextField label="Quiz Name" value={quizName} />
+        <br />
+        <TextField
+          label="Quiz Description"
+          value={quizDescription}
+          onChange={handleQuizDescriptionChange}
+        />
+        <br />
+        <TextField
+          label="Quiz Time"
+          value={quizTime}
+          onChange={handleQuizTimeChange}
+        />
+        <br />
+        <TextField
+          label="Quiz Points"
+          value={quizPoints}
+          onChange={handleQuizPointsChange}
+        />
+      </Card>
       <br />
-      <TextField
-        label="Quiz Description"
-        value={quizDescription}
-        onChange={handleQuizDescriptionChange}
-      />
-      <br />
-      <TextField
-        label="Quiz Time"
-        value={quizTime}
-        onChange={handleQuizTimeChange}
-      />
-      <br />
-      <TextField
-        label="Quiz Points"
-        value={quizPoints}
-        onChange={handleQuizPointsChange}
-      />
-      <br />
-      {questions.map((question, questionIndex) => (
-        <div key={questionIndex}>
-          <TextField
-            label={`Question ${questionIndex + 1}`}
-            value={question.questionText}
-            onChange={(event) => handleQuestionTextChange(questionIndex, event)}
-          />
-          <br />
-          {question.answerOptions.map((answerOption, answerIndex) => (
-            <div key={answerIndex}>
-              <TextField
-                label={`Answer ${answerIndex + 1}`}
-                value={answerOption.answerText}
-                onChange={(event) =>
-                  handleAnswerTextChange(questionIndex, answerIndex, event)
-                }
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={answerOption.isCorrect}
-                    onChange={() =>
-                      handleIsCorrectChange(questionIndex, answerIndex)
-                    }
-                  />
-                }
-                label="Correct"
-              />
-            </div>
-          ))}
-          <Button
-            type="contained"
-            color="secondary"
-            onClick={() => deleteQuestionHalder(questionIndex)}
-          >
-            Delete Question
-          </Button>
-        </div>
-      ))}
-      <h3>U can also add a question below :</h3>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "space-around",
+        }}
+      >
+        {questions.map((question, questionIndex) => (
+          <Card className={classes.card} key={questionIndex}>
+            <TextField
+              label={`Question ${questionIndex + 1}`}
+              value={question.questionText}
+              onChange={(event) =>
+                handleQuestionTextChange(questionIndex, event)
+              }
+            />
+            <br />
+            {question.answerOptions.map((answerOption, answerIndex) => (
+              <div key={answerIndex}>
+                <TextField
+                  label={`Answer ${answerIndex + 1}`}
+                  value={answerOption.answerText}
+                  onChange={(event) =>
+                    handleAnswerTextChange(questionIndex, answerIndex, event)
+                  }
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={answerOption.isCorrect}
+                      onChange={() =>
+                        handleIsCorrectChange(questionIndex, answerIndex)
+                      }
+                    />
+                  }
+                  label="Correct"
+                />
+              </div>
+            ))}
+            <Button
+              type="contained"
+              color="secondary"
+              onClick={() => deleteQuestionHalder(questionIndex)}
+            >
+              Delete Question
+            </Button>
+          </Card>
+        ))}
+      </div>
+      <h1 className={classes.heading}>U can also add a question below :</h1>
       <Grid>
         <Grid item>
           <TextField
@@ -290,7 +345,12 @@ const QuizComponent = () => {
           Add Question
         </Button>
       </Grid>
-      <Button type="contained" color="secondary" onClick={submitHandler}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={submitHandler}
+        style={{ marginLeft: "600px" }}
+      >
         Confirm Changes
       </Button>
     </div>
