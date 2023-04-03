@@ -32,6 +32,7 @@ firebase.initializeApp({
   messagingSenderId: "378619665748",
   appId: "1:378619665748:web:6f41afa548572b5cb4bcc1",
   measurementId: "G-XBY1TSR48W",
+
 });
 
 // Create a reference to the Firestore database
