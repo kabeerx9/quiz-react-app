@@ -1,4 +1,4 @@
-Quiz App with React and Firestore Database
+:Quiz App with React and Firestore Database
 
 This is a quiz app built with React and Firestore database using Vite.
 
